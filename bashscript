@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#show options
+echo "1)encrypt"
+echo "2)decrypt"
+
+read -p "enter option:" option
+
+if (($option==1)); then
+   echo
+   read -p "enter file name to be encrypted:" filename 
+   read -p "enter file name to store encrypted data:" outputfile
+   read -p "enter public key file name:" publickey
+   openssl pkeyutl -encrypt -in $filename -out $outputfile -inkey $publickey -pubin
+elif (($option==2)); then
+   echo
+   read -p "enter file to be decrypted:" filename
+   read -p "enter file name to store decrypted data:" outputfile
+   read -p "enter private key file name:" privkey
+   read -s -p "enter passkey for $privkey : " privkey_pass
+   openssl pkeyutl -decrypt -in $filename -out $outputfile -inkey $privkey -passin "pass:$privkey_pass"
+else
+   echo "invalid input"
+fi
